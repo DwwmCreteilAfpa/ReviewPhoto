@@ -42,7 +42,7 @@ class Photo
 
     public function getPostAt(): ?string
     {
-        return date_format($this->post_at, 'Y-m-d H:i:s');
+        return date_format($this->post_at, 'd-m-Y H:i:s');
     }
 
     public function setPostAt(\DateTimeImmutable $post_at): self

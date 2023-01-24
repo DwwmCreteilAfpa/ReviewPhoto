@@ -19,5 +19,13 @@ class PhotoController extends AbstractController
             'photos' => $photos,
         ]);
     }
+
+    #[Route('/photo/show/{id}', name : 'photo.show')]
+    public function show(Photo $photo): Response
+    {
+        return $this->render('photo/show.html.twig', [
+            'photo' => $photo,
+        ]);
+    }
 }
 
