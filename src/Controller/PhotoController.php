@@ -27,5 +27,23 @@ class PhotoController extends AbstractController
             'photo' => $photo,
         ]);
     }
+
+    #[Route('/photo/manage', name : 'photo.manage')]
+    public function manage(): Response
+    {
+        $user = $this->getUser();
+        $photos = $user->getPhotos();
+
+        return $this->render('photo/manage.html.twig', [
+            'photos' => $photos,
+        ]);
+    }
+
+    #[Route('/photo/delete/{id}', name : 'photo.delete')]
+    public function delete(Photo $photo): Response
+    {
+        return $this->redirectToRoute('photo.manage');
+    }
+
 }
 
