@@ -29,12 +29,13 @@
 						{{ "now"|date("d/m/Y") }}</h5>
 					{% block connexion %}
 						{% if not app.user %}
-							<a href="{{ path("app_login") }}" class="btn btn-primary">Se connecter</a>
+							<a href="{{ path("user.create") }}" class="btn btn-secondary">Pas encore de compte !</a>
+							<a href="{{ path("user.login") }}" class="btn btn-primary">Se connecter</a>
 						{% else %}
 							<h4>Bienvenue :
 								{{ app.user.pseudo }}
 							</h4>
-							<a href="{{ path('app_logout') }}" class="btn btn-secondary">Se déconnecter</a>
+							<a href="{{ path('user.logout') }}" class="btn btn-secondary">Se déconnecter</a>
 						{% endif %}
 					{% endblock %}
 				</div>
