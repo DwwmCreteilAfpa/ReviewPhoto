@@ -7,7 +7,7 @@
             {% for photo in photos %}
                 <div class="col-3">
                     <div class="card">
-                        <img class="card-img-top" src="{{ asset('assets/photos/empty.jpg') }}" alt="img defaut">
+                        <img class="card-img-top" src="{{ vich_uploader_asset(photo, 'imageFile') }}" alt="img defaut">
                         <div class="card-boby">
                             <h5 class="card-title"><a href="{{ path('photo.show', {id: photo.id}) }}">{{ photo.title }}</a></h5>
                             <h5>Postée par : {{ photo.user.pseudo }}</h5>

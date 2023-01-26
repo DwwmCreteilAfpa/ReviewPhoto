@@ -4,8 +4,12 @@ namespace App\Entity;
 
 use App\Repository\PhotoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 #[ORM\Entity(repositoryClass: PhotoRepository::class)]
+#[Vich\Uploadable]
 class Photo
 {
     #[ORM\Id]
@@ -16,6 +20,15 @@ class Photo
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Vich\UploadableField(mapping: 'uploaded_photos',  fileNameProperty: 'imageName', size: 'imageSize')]
+    private ?File $imageFile = null; 
+    
+    #[ORM\Column(length: 255)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(type: 'integer')]
+    private ?int $imageSize = null;
+    
     #[ORM\Column]
     private ?\DateTimeImmutable $post_at = null;
 
@@ -63,4 +76,42 @@ class Photo
 
         return $this;
     }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null): void {
+        $this->imageFile = $imageFile;
+        
+        if (null !== $imageFile ){
+            $this->post_at = new \DateTimeImmutable();
+        }
+    }
+  
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): self
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): self
+    {
+        $this->imageSize = $imageSize;
+
+        return $this;
+    }
+
 }

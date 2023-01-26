@@ -1,6 +1,11 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">
+			{{ message }}
+		</div>
+	{% endfor %}
 
 	<div class="container">
 		<h2>Liste de vos photos</h2>
@@ -29,7 +34,7 @@
 		</div>
 
 		<div class="col-4">
-			<a href="" class="btn btn-primary">Ajouter une photo</a>
+			<a href="{{ path('photo.new') }}" class="btn btn-primary">Ajouter une photo</a>
 		</div>
 	</div>
 </div>{% endblock %}

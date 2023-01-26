@@ -5,10 +5,10 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8">
-					<img src="{{ asset('assets/photos/empty.jpg') }}" alt="card-img-top" style="width: 100%; height: auto;">
+					<img src="{{ vich_uploader_asset(photo, 'imageFile')  }}" alt="card-img-top" style="width: 100%; height: auto;">
 				</div>
 				<div class="col-md-4">
-					<h1>{{photo.title }}</h1>
+					<h1>{{ photo.title }}</h1>
 					<h2>Postée le :
 						{{ photo.postAt|date("d/m/Y") }}</h2>
 					<div class="text-primary" style="font-weight: bold; font-size: 1.3rem">
