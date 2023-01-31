@@ -16,9 +16,16 @@
 							{{ photo.user.pseudo }}</p>
 					</div>
 					{% if app.user %}
-						<a href="#" class="btn btn-primary">Mettre un commentaire</a>
+						<h3>Mettre un commentaire</h3>
 						<div id="commentForm" class="mt-4">
-							<p>formulaire de saisie du commentaire</p>
+						    {{ form_start(commentForm) }}
+								<div class="row">
+									<div class="col">{{ form_row(commentForm.content) }}</div>
+								</div>
+								<div class="form-group">
+									<button class="btn btn-primary">Envoyer</button>
+								</div>
+                            {{ form_end(commentForm) }}
 						</div>
 					{% endif %}
 				</div>
@@ -35,11 +42,13 @@
 						<th>Date</th>
 						<th>Commentaire</th>
 					</tr>
+					{% for comment in photo.comments %}
 					<tr>
-						<td>le pseudo</td>
-						<td>la date de création</td>
-						<td>le commentaire</td>
+						<td>{{ comment.user.pseudo }}</td>
+						<td>{{ comment.createAt|date("d/m/Y") }}</td>
+						<td>{{ comment.content }}</td>
 					</tr>
+					{% endfor %}
 				</table>
 			</div>
 		</div>

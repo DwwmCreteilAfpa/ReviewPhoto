@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PhotoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -35,6 +37,14 @@ class Photo
     #[ORM\ManyToOne(inversedBy: 'photos')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\OneToMany(mappedBy: 'photo', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -110,6 +120,36 @@ class Photo
     public function setImageSize(?int $imageSize): self
     {
         $this->imageSize = $imageSize;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setPhoto($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getPhoto() === $this) {
+                $comment->setPhoto(null);
+            }
+        }
 
         return $this;
     }

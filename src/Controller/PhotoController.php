@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Photo;
+use App\Form\Photo\CommentType;
 use App\Form\Photo\NewPhotoType;
 use App\Repository\PhotoRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class PhotoController extends AbstractController
 {
@@ -24,8 +28,29 @@ class PhotoController extends AbstractController
     }
 
     #[Route('/photo/show/{id}', name : 'photo.show')]
-    public function show(Photo $photo): Response
+    public function show(Photo $photo, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if ($user) {
+            $comment = new Comment();
+            $form = $this->createForm(CommentType::class, $comment);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $comment->setUser($user)
+                        ->setPhoto($photo)
+                        ->setCreateAt(new \DateTimeImmutable());
+                $entityManager->persist($comment);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('photo.show', ['id' => $photo->getId()]);
+            } else {
+                return $this->render('photo/show.html.twig', [
+                    'photo' => $photo,
+                    'commentForm' => $form->createView(),
+                ]);
+            }
+            
+        }
         return $this->render('photo/show.html.twig', [
             'photo' => $photo,
         ]);
@@ -76,7 +101,6 @@ class PhotoController extends AbstractController
             'newForm' => $form->createView(),
         ]);
     }
-
 
 }
 
